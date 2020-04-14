@@ -24,6 +24,8 @@ from . import celery
 class MailChimpConfigException(Exception):
     """Raised when the MailChimp config is invalid."""
 
+class MailChimpException(Exception):
+     """Raised any MailChimp expection."""
 
 def get_client():
     headers = default_headers()
@@ -69,6 +71,9 @@ def create_campaign(client, recipients, settings=None):
             'A Mailchimp API error occurred while creating a campaign, aborting: {} {}'.format(e, e.response))
         rollbar.report_exc_info()
         raise e
+    
+    # except Exception as e:
+    #     raise e("Raise slack messaged")
 
 
 def update_campaign_content(client, campaign_id, email_body):
