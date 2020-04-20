@@ -72,8 +72,8 @@ def create_campaign(client, recipients, settings=None):
         rollbar.report_exc_info()
         raise e
     
-    # except Exception as e:
-    #     raise e("Raise slack messaged")
+    except Exception as e:
+        raise e("Raise slack messaged")
 
 
 def update_campaign_content(client, campaign_id, email_body):
