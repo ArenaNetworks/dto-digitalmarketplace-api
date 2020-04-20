@@ -25,7 +25,7 @@ class MailChimpConfigException(Exception):
     """Raised when the MailChimp config is invalid."""
 
 class MailChimpException(Exception):
-     """Raised any MailChimp expection."""
+     """Raise any MailChimp expection."""
 
 def get_client():
     headers = default_headers()
