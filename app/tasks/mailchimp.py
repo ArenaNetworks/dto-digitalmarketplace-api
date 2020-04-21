@@ -152,7 +152,8 @@ def add_members_to_list(client, list_id, email_addresses):
     except Exception as error:
         publish.task.mailchimp.delay(
             'mailchimp_error',
-            'error_mesage' = 'MailChimp API error occured when createing a campaign'
+            error_mesage = 'MailChimp API error occured when createing a campaign',
+             error = error.message
         )
 
 
