@@ -121,6 +121,10 @@ def compress_evidence(evidence):
         'submitted_at': evidence.submitted_at
     }
 
+@celery.task
+def mailchimp(event_type, **kwargs):
+    publish.mailchimp(event_type, **kwargs)
+
 
 @celery.task
 def supplier_domain(supplier_domain, event_type, **kwargs):

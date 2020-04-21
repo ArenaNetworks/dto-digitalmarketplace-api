@@ -12,6 +12,7 @@ from requests.utils import default_headers
 from sqlalchemy import true
 
 from app import db
+from app.tasks import publish_tasks
 from app.api.services import AuditTypes as audit_types
 from app.api.services import audit_service, audit_types, suppliers, briefs
 from app.models import (AuditEvent, Brief, Framework, Supplier, SupplierDomain,
@@ -23,9 +24,6 @@ from . import celery
 
 class MailChimpConfigException(Exception):
     """Raised when the MailChimp config is invalid."""
-
-class MailChimpException(Exception):
-     """Raise any MailChimp expection."""
 
 def get_client():
     headers = default_headers()
@@ -72,8 +70,12 @@ def create_campaign(client, recipients, settings=None):
         rollbar.report_exc_info()
         raise e
     
-    except MailChimpException as error:
-        raise error('MailChimp API error occured when createing a campaign')
+    except Exception as error:
+        publish_tasks.mailchimp.delay(
+            'error',
+            message = 'MailChimp API error occured when createing a campaign',
+            error = error.message
+        )
 
 
 def update_campaign_content(client, campaign_id, email_body):
@@ -93,8 +95,14 @@ def update_campaign_content(client, campaign_id, email_body):
             .format(campaign_id, e, e.response))
         rollbar.report_exc_info()
         raise e
-    except MailChimpException as error:
-        raise error('MailChimp API error occured when udpating content for campaign')
+
+    except Exception as error:
+        publish_tasks.mailchimp.delay(
+            'error',
+            message = 'MailChimp API error occured when updating campaign',
+            error = error.message
+        )
+
 
 def schedule_campaign(client, campaign_id, schedule_time):
     try:
@@ -109,8 +117,13 @@ def schedule_campaign(client, campaign_id, schedule_time):
             .format(campaign_id, e, e.response))
         rollbar.report_exc_info()
         raise e
-    except MailChimpException as error:
-        raise error('MailChimp API error occured when scheduling campaign')
+
+    except Exception as error:
+        publish_tasks.mailchimp.delay(
+            'error',
+            message = 'MailChimp API error occured when scheduling campaign',
+            error = error.message
+        )
 
 
 def add_members_to_list(client, list_id, email_addresses):
@@ -135,8 +148,12 @@ def add_members_to_list(client, list_id, email_addresses):
             .format(list_id, e, e.response))
         rollbar.report_exc_info()
         raise e
-    except MailChimpException as error:
-        raise error('MailChimp API error occured when adding member to list')
+
+    except Exception as error:
+        publish.task.mailchimp.delay(
+            'mailchimp_error',
+            'error_mesage' = 'MailChimp API error occured when createing a campaign'
+        )
 
 
 def send_document_expiry_campaign(client, sellers):
