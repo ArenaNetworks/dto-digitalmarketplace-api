@@ -72,8 +72,8 @@ def create_campaign(client, recipients, settings=None):
         rollbar.report_exc_info()
         raise e
     
-    except Exception as e:
-        raise e("Raise slack messaged")
+    except MailChimpException as error:
+        raise error('MailChimp API error occured when createing a campaign')
 
 
 def update_campaign_content(client, campaign_id, email_body):
@@ -93,7 +93,8 @@ def update_campaign_content(client, campaign_id, email_body):
             .format(campaign_id, e, e.response))
         rollbar.report_exc_info()
         raise e
-
+    except MailChimpException as error:
+        raise error('MailChimp API error occured when udpating content for campaign')
 
 def schedule_campaign(client, campaign_id, schedule_time):
     try:
@@ -108,6 +109,8 @@ def schedule_campaign(client, campaign_id, schedule_time):
             .format(campaign_id, e, e.response))
         rollbar.report_exc_info()
         raise e
+    except MailChimpException as error:
+        raise error('MailChimp API error occured when scheduling campaign')
 
 
 def add_members_to_list(client, list_id, email_addresses):
@@ -132,6 +135,8 @@ def add_members_to_list(client, list_id, email_addresses):
             .format(list_id, e, e.response))
         rollbar.report_exc_info()
         raise e
+    except MailChimpException as error:
+        raise error('MailChimp API error occured when adding member to list')
 
 
 def send_document_expiry_campaign(client, sellers):
