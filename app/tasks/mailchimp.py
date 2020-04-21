@@ -25,6 +25,7 @@ from . import celery
 class MailChimpConfigException(Exception):
     """Raised when the MailChimp config is invalid."""
 
+
 def get_client():
     headers = default_headers()
     headers['User-Agent'] = 'Digital Marketplace (marketplace.service.gov.au)'
@@ -69,12 +70,12 @@ def create_campaign(client, recipients, settings=None):
             'A Mailchimp API error occurred while creating a campaign, aborting: {} {}'.format(e, e.response))
         rollbar.report_exc_info()
         raise e
-    
+
     except Exception as error:
         publish_tasks.mailchimp.delay(
             'error',
-            message = 'MailChimp API error occured when createing a campaign',
-            error = error.message
+            message='MailChimp API error occured when createing a campaign',
+            error=error.message
         )
 
 
@@ -99,8 +100,8 @@ def update_campaign_content(client, campaign_id, email_body):
     except Exception as error:
         publish_tasks.mailchimp.delay(
             'error',
-            message = 'MailChimp API error occured when updating campaign',
-            error = error.message
+            message='MailChimp API error occured when updating campaign',
+            error=error.message
         )
 
 
@@ -121,8 +122,8 @@ def schedule_campaign(client, campaign_id, schedule_time):
     except Exception as error:
         publish_tasks.mailchimp.delay(
             'error',
-            message = 'MailChimp API error occured when scheduling campaign',
-            error = error.message
+            message='MailChimp API error occured when scheduling campaign',
+            error=error.message
         )
 
 
@@ -152,8 +153,8 @@ def add_members_to_list(client, list_id, email_addresses):
     except Exception as error:
         publish.task.mailchimp.delay(
             'mailchimp_error',
-            error_mesage = 'MailChimp API error occured when createing a campaign',
-             error = error.message
+            error_mesage='MailChimp API error occured when createing a campaign',
+            error=error.message
         )
 
 
