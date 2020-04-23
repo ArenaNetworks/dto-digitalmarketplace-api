@@ -101,7 +101,7 @@ def update_campaign_content(client, campaign_id, email_body):
         publish_tasks.mailchimp.delay(
             'error',
             message='MailChimp API error occured when updating campaign',
-            error=error
+            error=error.message
         )
 
 
@@ -123,7 +123,7 @@ def schedule_campaign(client, campaign_id, schedule_time):
         publish_tasks.mailchimp.delay(
             'error',
             message='MailChimp API error occured when scheduling campaign',
-            error=error
+            error=error.message
         )
 
 
@@ -154,7 +154,7 @@ def add_members_to_list(client, list_id, email_addresses):
         publish.task.mailchimp.delay(
             'mailchimp_error',
             error_mesage='MailChimp API error occured when createing a campaign',
-            error=error
+            error=error.message
         )
 
 
