@@ -93,7 +93,7 @@ class Config:
     SQLALCHEMY_COMMIT_ON_TEARDOWN = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_RECORD_QUERIES = True
-    SQLALCHEMY_DATABASE_URI = 'postgresql:///digitalmarketplace'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://api:password@host.docker.internal:5432/digitalmarketplace'
     BASE_TEMPLATE_DATA = {}
 
     DM_FAILED_LOGIN_LIMIT = 5
@@ -208,10 +208,16 @@ class Config:
     CELERY_TIMEZONE = 'Australia/Sydney'
     CELERYBEAT_SCHEDULE = {}
 
+    try:
+        print("REDIS_SERVER_HOST:", os.environ['REDIS_SERVER_HOST'])
+        REDIS_HOST = os.environ['REDIS_SERVER_HOST']
+    except KeyError:
+        print("Environment variable 'REDIS_SERVER_HOST' does not exist using value: host.docker.internal")
+        REDIS_HOST = "host.docker.internal"
 
     # redis
     REDIS_SESSIONS = True
-    REDIS_SERVER_HOST = '127.0.0.1'
+    REDIS_SERVER_HOST = REDIS_HOST
     REDIS_SERVER_PORT = 6379
     REDIS_SERVER_PASSWORD = None
     REDIS_SSL = False
@@ -227,7 +233,7 @@ class Test(Config):
     DM_LOG_LEVEL = 'WARN'
     DEBUG = True
     ES_ENABLED = False
-    SQLALCHEMY_DATABASE_URI = 'postgresql:///digitalmarketplace_test'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://api:password@host.docker.internal:5432/digitalmarketplace_test'
     DM_API_AUTH_TOKENS = 'myToken'
     DM_API_APPLICATIONS_PAGE_SIZE = 5
     DM_API_SERVICES_PAGE_SIZE = 5
@@ -262,7 +268,7 @@ class Development(Config):
 
     DM_API_AUTH_TOKENS = 'myToken'
     DM_SEARCH_API_AUTH_TOKEN = 'myToken'
-    DM_SEARCH_API_URL = 'http://localhost:5001'
+    DM_SEARCH_API_URL = 'http://host.docker.internal:5001'
     DM_API_ADMIN_PASSWORD = 'admin'
     DM_LOG_LEVEL = 'INFO'
 
@@ -275,15 +281,17 @@ class Development(Config):
     DM_SEND_EMAIL_TO_STDERR = True
     SEND_EMAILS = True
     SECRET_KEY = 'DevKeyDevKeyDevKeyDevKeyDevKeyDevKeyDevKeyX='
-    FRONTEND_ADDRESS = 'http://localhost:8000'
+    FRONTEND_ADDRESS = 'http://host.docker.internal:8000'
     BASIC_AUTH = True
-    AWS_S3_URL = 'http://localhost:4572'
-    AWS_SES_URL = 'http://localhost:4579'
+    AWS_S3_URL = 'http://host.docker.internal:4572'
+    AWS_SES_URL = 'http://host.docker.internal:4579'
     AWS_SQS_BROKER_URL = 'sqs://@localhost:4576'
-    AWS_SQS_QUEUE_URL = 'http://localhost:4576/queue/dta-marketplace-local'
+    AWS_SQS_QUEUE_URL = 'http://host.docker.internal:4576/queue/dta-marketplace-local'
     AWS_SQS_QUEUE_NAME = 'dta-marketplace-local'
     CELERYBEAT_SCHEDULE = CELERYBEAT_SCHEDULE
 
+    REDIS_SERVER_HOST = "host.docker.internal"
+    SQLALCHEMY_DATABASE_URI = 'postgresql://api:password@host.docker.internal:5432/digitalmarketplace'
 
 class Live(Config):
     """Base config for deployed environments"""

@@ -44,4 +44,9 @@ lint:
 test_unit:
 	py.test ${PYTEST_ARGS}
 
+docker:
+	docker build -t dto-api .
+docker-run:
+	docker run -p 5000:5000 -t dto-api
+
 .PHONY: virtualenv requirements requirements_for_test test_pep8 test_migrations test_unit test test_all run_migrations run_app run_all

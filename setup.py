@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 setup(
     name='dto-digitalmarketplace-api',
     version='500',  # TODO: Use semver?
-    url='https://github.com/ausdto/dto-digitalmarketplace-api',
+    url='https://github.com/arenanetworks/dto-digitalmarketplace-api',
     license='MIT',
     author='GDS Developers',
     description='Marketplace API',
