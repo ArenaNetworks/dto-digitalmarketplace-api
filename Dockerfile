@@ -1,5 +1,7 @@
 FROM python:2.7-stretch
 
+RUN apt update && apt install -y awscli
+
 WORKDIR /app
 
 COPY requirements.txt .
